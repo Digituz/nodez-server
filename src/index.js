@@ -1,18 +1,20 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const { clone } = require('./repository-service');
+
 const app = express();
-const Docker = require('dockerode');
+app.use(bodyParser.json());
 
-const docker = new Docker({socketPath: '/var/run/docker.sock'});
-
-app.get('/', async (req, res) => {
-  docker.listContainers(function (err, containers) {
-    if (err) return console.log(err);
-
-    containers.forEach(function (containerInfo) {
-      console.log(containerInfo);
-      res.send('Hello World!');
-    });
-  });
+app.post('/', async (req, res) => {
+  const { commandDetails } = req.body;
+  try {
+    const repo = await clone(commandDetails.repository);
+    console.log(repo);
+    res.send(repo);
+  } catch (error) {
+    console.log(error);
+    res.status(404).send(error);
+  }
 });
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'));
