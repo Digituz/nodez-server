@@ -26,6 +26,27 @@ const buildImage = (repository, port) => {
   });
 };
 
+const run = (repository) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const container = await docker.createContainer({
+        Image: repository.name,
+        AttachStdin: false,
+        AttachStdout: true,
+        AttachStderr: true,
+        PortBindings: {
+          "3000/tcp": [{HostPort: "3005"}]
+        },
+      });
+      await container.start();
+      resolve();
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
 module.exports = {
   buildImage,
+  run,
 };

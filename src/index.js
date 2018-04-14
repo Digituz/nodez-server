@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { buildImage } = require('./docker-service');
+const { buildImage, run } = require('./docker-service');
 const { clone } = require('./repository-service');
 
 const app = express();
@@ -19,6 +19,7 @@ app.post('/', async (req, res) => {
 
   try {
     await buildImage(repo);
+    await run(repo);
     res.send({message: 'done'});
   } catch (error) {
     console.log(error);
