@@ -29,4 +29,4 @@ app.post('/', async (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log('Nodez server is listening on port 3000.'));
+app.listen(3337, () => console.log('Nodez server is listening on port 3337.'));

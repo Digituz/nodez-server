@@ -12,8 +12,8 @@ const server = http.createServer((req, res) => {
   proxy.web(req, res, { target: `http://${containerName}:${port}/` });
 });
 
-console.log("Nodez proxy is listening on port 5050.");
-server.listen(5050);
+console.log("Nodez proxy is listening on port 3338.");
+server.listen(3338);
 
 const addProxy = (subdomain, containerName, port) => {
   containers[subdomain] = {
