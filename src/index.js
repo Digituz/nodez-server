@@ -8,6 +8,8 @@ const app = express();
 app.use(bodyParser.json());
 
 app.post('/', async (req, res) => {
+  console.log(`Deploying new container.`, commandDetails);
+
   const { commandDetails } = req.body;
   let repo;
   try {
@@ -18,10 +20,18 @@ app.post('/', async (req, res) => {
     });
   }
 
+  console.log(`Finished cloning ${commandDetails.repository}`);
+
   try {
     await buildImage(repo, commandDetails.port);
+    console.log('Built image', commandDetails);
+
     const containerName = await run(repo, commandDetails.port);
+    console.log(`Ran ${containerName}`);
+
     addProxy(commandDetails.subdomain, containerName, commandDetails.port);
+    console.log(`Activated proxy for ${subdomain}`);
+
     res.send({message: 'done'});
   } catch (error) {
     console.log(error);
