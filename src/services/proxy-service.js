@@ -13,7 +13,7 @@ const server = http.createServer((req, res) => {
 });
 
 console.log("Nodez proxy is listening on port 3338.");
-server.listen(3338);
+server.listen(3338, '0.0.0.0');
 
 const addProxy = (subdomain, containerName, port) => {
   containers[subdomain] = {
