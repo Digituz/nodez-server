@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { buildImage, run } = require('./services/docker-service');
+const { addProxy } = require('./services/proxy-service');
 const { clone } = require('./services/repository-service');
 
 const app = express();
@@ -18,8 +19,9 @@ app.post('/', async (req, res) => {
   }
 
   try {
-    await buildImage(repo);
-    await run(repo);
+    await buildImage(repo, commandDetails.port);
+    const containerName = await run(repo, commandDetails.port);
+    addProxy(commandDetails.subdomain, containerName, commandDetails.port);
     res.send({message: 'done'});
   } catch (error) {
     console.log(error);
@@ -27,4 +29,4 @@ app.post('/', async (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
+app.listen(3000, () => console.log('Nodez server is listening on port 3000.'));

@@ -6,7 +6,7 @@ const docker = new Docker({socketPath: '/var/run/docker.sock'});
 
 const buildImage = (repository, port) => {
   return new Promise(async (resolve, reject) => {
-    const dockerfileTemplate = readFileSync(`${__dirname}/templates/Dockerfile.template`).toString();
+    const dockerfileTemplate = readFileSync(`${__dirname}/../templates/Dockerfile.template`).toString();
 
     writeFileSync(`${repository.dir}/Dockerfile`, dockerfileTemplate.replace('${PORT}', port || 3000));
 
@@ -24,20 +24,22 @@ const buildImage = (repository, port) => {
   });
 };
 
-const run = (repository) => {
+const run = (repository, port) => {
   return new Promise(async (resolve, reject) => {
     try {
+      const portBinding = `${port || 3000}/tcp`;
       const container = await docker.createContainer({
         Image: repository.name,
         AttachStdin: false,
         AttachStdout: true,
         AttachStderr: true,
         PortBindings: {
-          "3000/tcp": [{HostPort: "3005"}]
+          [portBinding]: [{HostPort: "3005"}]
         },
       });
       await container.start();
-      resolve();
+      const info = await container.inspect();
+      resolve(info.Name.substring(1));
     } catch (err) {
       reject(err);
     }
