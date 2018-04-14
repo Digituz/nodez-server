@@ -17,8 +17,6 @@ const buildImage = (repository, port) => {
       }, [`./`]
     ).catch(reject);
 
-    console.log(`${repository.dir}`);
-
     docker.buildImage(`${repository.dir}/../digituz-image-files.tar`, {t: repository.name}, (error) => {
       if (error) return reject(error);
       resolve();

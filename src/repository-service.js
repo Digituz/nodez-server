@@ -6,8 +6,6 @@ const clone = (repository) => {
     const now = new Date();
     const dir = `${os.tmpdir()}/${now.getTime()}`;
 
-    console.log(`Starting to clone https://github.com/${repository} on ${dir}.`);
-
     try {
       await git.Clone(`https://github.com/${repository}`, `${os.tmpdir()}/${now.getTime()}`);
       resolve({
