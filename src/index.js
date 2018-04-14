@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { buildImage, run } = require('./docker-service');
-const { clone } = require('./repository-service');
+const { buildImage, run } = require('./services/docker-service');
+const { clone } = require('./services/repository-service');
 
 const app = express();
 app.use(bodyParser.json());
