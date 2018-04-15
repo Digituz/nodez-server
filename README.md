@@ -21,8 +21,14 @@ git clone https://github.com/Digituz/nodez-server.git ~/nodez-server
 cd ~/nodez-server
 npm i
 
-# build the nginx image
+# launch nodez-server
 node src/index.js
+
+# build the nginx image
+docker build -t digituz-gateway .
+
+# run an instance based on this image
+docker run --network digituz --name digituz-gateway -d -p 80:80 digituz-gateway
 ```
 
 > **Note:** You might need to `apt-get install build-essential` and `apt install libssl-dev`.
